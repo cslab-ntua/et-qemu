@@ -27,6 +27,14 @@ ram_backend_memory_alloc(HostMemoryBackend *backend, Error **errp)
         return;
     }
 
+	if (getenv("QEMU_POPULATE")) {
+		char v = 1;
+		if (setenv("QEMU_POPULATE_INTERNAL", &v, 0) != 0) {
+			error_setg(errp, "can't set QEMU_POPULATE_INTERNAL");
+			return;
+		}
+    }
+
     name = host_memory_backend_get_name(backend);
     ram_flags = backend->share ? RAM_SHARED : 0;
     ram_flags |= backend->reserve ? 0 : RAM_NORESERVE;

@@ -541,7 +541,9 @@ int madvise(char *, size_t, int);
    /* Use 2 MiB alignment so transparent hugepages can be used by KVM.
       Valgrind does not support alignments larger than 1 MiB,
       therefore we need special code which handles running on Valgrind. */
-#  define QEMU_VMALLOC_ALIGN (512 * 4096)
+//#  define QEMU_VMALLOC_ALIGN (512 * 4096)
+// FIXME: psomas (32MB alignment)
+#  define QEMU_VMALLOC_ALIGN (16 * 512 * 4096)
 #elif defined(__linux__) && defined(__s390x__)
    /* Use 1 MiB (segment size) alignment so gmap can be used by KVM. */
 #  define QEMU_VMALLOC_ALIGN (256 * 4096)

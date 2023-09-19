@@ -204,6 +204,15 @@ static void *mmap_activate(void *ptr, size_t size, int fd,
         map_sync_flags = MAP_SYNC | MAP_SHARED_VALIDATE;
     }
 
+	if (getenv("QEMU_POPULATE_INTERNAL")) {
+		flags |= MAP_POPULATE;
+		char v = 0;
+		if (setenv("QEMU_POPULATE_INTERNAL", &v, 0) != 0) {
+			fprintf(stderr, "can't set QEMU_POPULATE_INTERNAL");
+			return MAP_FAILED;
+		}
+	}
+
     activated_ptr = mmap(ptr, size, prot, flags | map_sync_flags, fd,
                          map_offset);
     if (activated_ptr == MAP_FAILED && map_sync_flags) {
